@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.jettra</groupId>
+    <artifactId>jettraframeworkscontainers</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>jettraframeworkscontainers</name>
+    <url>http://maven.apache.org</url>
+    
+    <properties>
+        <maven.compiler.release>25</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Permite a JitPack o a proyectos hijos reutilizar la versión exacta -->
+        <jettra.version>${project.version}</jettra.version>
+
+    </properties>
+    
+    <modules>
+        <module>JettraAnnotation</module>
+        <module>JettraCDI</module>
+        <module>JettraEE</module>
+        <module>JettraFlux</module>
+        <module>JettraGRPC</module>
+        <module>JettraJSON</module>
+        <module>JettraJWT</module>
+        <module>JettraReport</module>
+        <module>JettraRest</module>
+        <module>JettraRules</module>
+        <module>JettraTest</module>
+        <module>JettraCollections</module>
+        <module>themes/Admin</module>
+        <module>themes/AdminLTE</module>
+        <module>themes/Bit</module>
+        <module>themes/Metropolis</module>
+        <module>themes/Tail</module>
+        <module>themes/Traditional</module>
+        <module>JettraStudio</module>
+    </modules>
+    <dependencies>
+    
+    </dependencies>
+    
+    <!-- Definición del BOM: centraliza versiones sin forzar la descarga de todas -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Módulos propios del ecosistema Jettra -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraAnnotation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraCDI</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraCollections</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraEE</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraFlux</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraStudio</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraGRPC</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraJSON</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraJWT</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraReport</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraRest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraRules</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>JettraTest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        
+
+   
+           
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <plugins>
+            <!-- Necesario para que JitPack instale y publique el código compilado de los módulos -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

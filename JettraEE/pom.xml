@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- 1. Herencia del Proyecto Maestro -->
+    <parent>
+        <groupId>io.jettra</groupId>
+        <artifactId>jettraframeworks</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- 2. Identificador del Submódulo -->
+    <artifactId>JettraEE</artifactId>
+    <packaging>jar</packaging>
+    <name>JettraEE</name>
+    <description>Servidor de aplicaciones super ligero, escalable y eficiente, con arquitectura nativa Jettra (JettraCDI, JettraRest, JettraJWT, JettraFlux y JettraRules), sin dependencias de Jakarta EE o Eclipse MicroProfile.</description>
+    <!--    <groupId>io.jettra</groupId>
+    <artifactId>JettraEE</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>-->
+
+  
+
+<!--    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+         Jettra Stack Ecosystem 
+        <jettra.annotation.version>1.0.0-SNAPSHOT</jettra.annotation.version>
+        <jettra.cdi.version>1.0.0-SNAPSHOT</jettra.cdi.version>
+        <jettra.rest.version>1.0.0-SNAPSHOT</jettra.rest.version>
+        <jettra.jwt.version>1.0.0-SNAPSHOT</jettra.jwt.version>
+        <jettra.json.version>1.0.0-SNAPSHOT</jettra.json.version>
+        <jettra.flux.version>1.0.0-SNAPSHOT</jettra.flux.version>
+        <jettra.rules.version>1.0.0-SNAPSHOT</jettra.rules.version>
+        <jettra.report.version>1.0.0-SNAPSHOT</jettra.report.version>
+        <jettra.test.version>1.0.0-SNAPSHOT</jettra.test.version>
+    </properties>-->
+
+    <dependencies>
+        <!-- Jettra Stack Native Core Modules -->
+        <dependency>
+            <groupId>io.jettra</groupId>
+            <artifactId>JettraCDI</artifactId>
+            <!--<version>${jettra.cdi.version}</version>-->
+               <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jettra</groupId>
+            <artifactId>JettraRest</artifactId>
+            <!--<version>${jettra.rest.version}</version>-->
+               <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jettra</groupId>
+            <artifactId>JettraJWT</artifactId>
+            <!--<version>${jettra.jwt.version}</version>-->
+               <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jettra</groupId>
+            <artifactId>JettraAnnotation</artifactId>
+            <!--<version>${jettra.annotation.version}</version>-->
+               <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jettra</groupId>
+            <artifactId>JettraJSON</artifactId>
+            <!--<version>${jettra.json.version}</version>-->
+               <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jettra</groupId>
+            <artifactId>JettraFlux</artifactId>
+            <!--<version>${jettra.flux.version}</version>-->
+               <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jettra</groupId>
+            <artifactId>JettraRules</artifactId>
+            <!--<version>${jettra.rules.version}</version>-->
+               <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jettra</groupId>
+            <artifactId>JettraReport</artifactId>
+            <!--<version>${jettra.report.version}</version>-->
+               <scope>provided</scope>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>io.jettra</groupId>
+            <artifactId>JettraTest</artifactId>
+            <!--<version>${jettra.test.version}</version>-->
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>io.jettra</groupId>
+                            <artifactId>JettraAnnotation</artifactId>
+                            <version>${project.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>io.jettra.ee.JettraEE</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>jettra-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>io.jettra.test.runner.JettraTestRunner</mainClass>
+                            <classpathScope>test</classpathScope>
+                            <cleanupDaemonThreads>false</cleanupDaemonThreads>
+                            <arguments>
+                                <argument>${project.build.testOutputDirectory}</argument>
+                                <argument>${project.build.outputDirectory}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+</project>

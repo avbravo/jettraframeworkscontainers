@@ -1,0 +1,29 @@
+# Excluir la carpeta target de la raíz y de CUALQUIER submódulo en cualquier nivel de profundidad
+**/target/
+target/
+
+# Archivos de compilación individuales
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs de Maven
+mvn-error.log
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+
+# Configuraciones de IDEs y editores
+.idea/
+*.iml
+.vscode/
+nbproject/private/
+.project
+.classpath
+.settings/
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db

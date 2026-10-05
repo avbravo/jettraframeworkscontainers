@@ -1,0 +1,46 @@
+before_install:
+  - curl -s https://download.java.net/java/early_access/jdk25/12/GPL/openjdk-25-ea+12_linux-x64_bin.tar.gz -o /tmp/jdk25.tar.gz || curl -s https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.tar.gz -o /tmp/jdk25.tar.gz
+  - mkdir -p /tmp/jdk-25 && tar -xzf /tmp/jdk25.tar.gz -C /tmp/jdk-25 --strip-components=1
+  - export JAVA_HOME=/tmp/jdk-25
+  - export PATH=$JAVA_HOME/bin:$PATH
+  - java -version
+
+install:
+  - mvn clean install -DskipTests
+
+#install:
+#  - source /home/jitpack/.sdkman/bin/sdkman-init.sh && sdk install java 25-open || sdk install java 25-librca
+#  - source /home/jitpack/.sdkman/bin/sdkman-init.sh && sdk use java 25-open && mvn clean install -DskipTests
+#before_install:
+#  # Descargar el binario portable tar.gz de BellSoft Liberica JDK 25 (Standard x86_64)
+#  - curl -sL https://download.bell-sw.com/java/25/bellsoft-jdk25-linux-amd64.tar.gz -o liberica-jdk25.tar.gz || curl -sL https://download.bell-sw.com/java/25+37/bellsoft-jdk25+37-linux-amd64.tar.gz -o liberica-jdk25.tar.gz
+#  - mkdir -p /home/jitpack/liberica-25
+#  - tar -xzf liberica-jdk25.tar.gz -C /home/jitpack/liberica-25 --strip-components=1
+#  # Exportar variables de entorno para que Maven use el nuevo JDK
+#  - export JAVA_HOME=/home/jitpack/liberica-25
+#  - export PATH=$JAVA_HOME/bin:$PATH
+#  # Validar que JitPack detecte Liberica 25
+#  - java -version
+#
+#install:
+#  - mvn clean install -DskipTests
+
+#jdk:
+#  - openjdk25
+#install:
+#  - mvn clean install -DskipTests
+
+#before_install:
+#  - sudo apt-get update -qq
+#  - sudo apt-get install -y wget apt-transport-https gnupg
+#  # Descargar e instalar Liberica JDK 25 de BellSoft
+#  - wget -q https://download.bell-sw.com/java/25+37/bellsoft-jdk25+37-linux-amd64.deb -O liberica-jdk.deb || wget -q https://download.bell-sw.com/java/25/bellsoft-jdk25-linux-amd64.deb -O liberica-jdk.deb
+#  - sudo dpkg -i liberica-jdk.deb || sudo apt-get install -f -y
+#  # Establecer JAVA_HOME y actualizar alternativas
+#  - export JAVA_HOME=$(ls -d /usr/lib/jvm/bellsoft-java25* 2>/dev/null || ls -d /usr/lib/jvm/*liberica* 2>/dev/null)
+#  - export PATH=$JAVA_HOME/bin:$PATH
+#  # Validar versión en el log de JitPack
+#  - java -version
+#
+#install:
+#  - mvn clean install -DskipTests
