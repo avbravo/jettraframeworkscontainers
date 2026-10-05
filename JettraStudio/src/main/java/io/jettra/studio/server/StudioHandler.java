@@ -67,6 +67,12 @@ public class StudioHandler implements HttpHandler {
         // 3. Build PageParameters
         PageParameters params = new PageParameters(queryParams);
 
+        // 3.5 Check Page Security Constraints
+        Class<? extends WebPage> targetClass = (pageClass != null) ? pageClass : null;
+        if (targetClass != null && !checkSecurity(exchange, targetClass, cookies)) {
+            return;
+        }
+
         // 4. Instantiate WebPage
         WebPage page = createPageInstance(params);
         if (themeCookie != null && !themeCookie.isBlank()) {
@@ -90,6 +96,19 @@ public class StudioHandler implements HttpHandler {
                     btn.onClick();
                 }
             }
+        }
+
+        // Process response cookies
+        for (String cookie : page.getResponseCookies()) {
+            exchange.getResponseHeaders().add("Set-Cookie", cookie);
+        }
+
+        // Process programmatic redirect
+        if (page.getRedirectUrl() != null && !page.getRedirectUrl().isBlank()) {
+            exchange.getResponseHeaders().set("Location", page.getRedirectUrl());
+            exchange.sendResponseHeaders(302, 0);
+            try (OutputStream os = exchange.getResponseBody()) {}
+            return;
         }
 
         // 6. Render HTML response
@@ -129,10 +148,12 @@ public class StudioHandler implements HttpHandler {
         throw new IllegalStateException("No page class or supplier configured");
     }
 
-    private void processFormSubmissions(WebPage page, Map<String, String> postData) {
-        for (Component child : page) {
+    private void processFormSubmissions(io.jettra.studio.core.MarkupContainer container, Map<String, String> postData) {
+        for (Component child : container) {
             if (child instanceof Form<?> form) {
                 form.processSubmit(postData);
+            } else if (child instanceof io.jettra.studio.core.MarkupContainer mc) {
+                processFormSubmissions(mc, postData);
             }
         }
     }
@@ -169,6 +190,46 @@ public class StudioHandler implements HttpHandler {
             }
         }
         return cookies;
+    }
+
+    
+    private boolean checkSecurity(HttpExchange exchange, Class<? extends WebPage> targetClass, Map<String, String> cookies) throws IOException {
+        if (targetClass == null) return true;
+
+        if (targetClass.isAnnotationPresent(io.jettra.studio.security.NoLoginRequired.class)) {
+            return true;
+        }
+
+        if (targetClass.isAnnotationPresent(io.jettra.studio.security.Secured.class)) {
+            io.jettra.studio.security.Secured secured = targetClass.getAnnotation(io.jettra.studio.security.Secured.class);
+            String user = cookies.get("jettra_user");
+            if (user == null || user.isBlank()) {
+                exchange.getResponseHeaders().set("Location", secured.loginUrl());
+                exchange.sendResponseHeaders(302, 0);
+                try (OutputStream os = exchange.getResponseBody()) {}
+                return false;
+            }
+            if (secured.roles().length > 0) {
+                String role = cookies.get("jettra_role");
+                boolean authorized = false;
+                for (String r : secured.roles()) {
+                    if (r != null && r.equalsIgnoreCase(role)) {
+                        authorized = true;
+                        break;
+                    }
+                }
+                if (!authorized) {
+                    byte[] msg = "<!DOCTYPE html><html><body style=\"font-family:sans-serif;text-align:center;padding:50px;background:#0f172a;color:#fff;\"><h1 style=\"color:#ef4444;\">403 - Acceso Denegado</h1><p>Su rol no tiene autorización para acceder a esta página.</p><a href=\"/dashboard\" style=\"color:#38bdf8;\">Volver al Dashboard</a></body></html>".getBytes(StandardCharsets.UTF_8);
+                    exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+                    exchange.sendResponseHeaders(403, msg.length);
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        os.write(msg);
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private Map<String, String> parsePostData(HttpExchange exchange) throws IOException {

@@ -21,6 +21,8 @@ public abstract class WebPage extends MarkupContainer {
     private String pageTitle;
     private String currentThemeName;
     private ColorMode currentColorMode = ColorMode.DARK;
+    private String redirectUrl;
+    private final java.util.List<String> responseCookies = new java.util.ArrayList<>();
 
     private static final Pattern I18N_TAG_PATTERN = Pattern.compile(
         "<(?:jettrat:message|jettra:message|jettras:message)\\s+key=[\"']([^\"']+)[\"'][^>]*?(?:/>|>.*?</(?:jettrat:message|jettra:message|jettras:message)>)",
@@ -62,6 +64,27 @@ public abstract class WebPage extends MarkupContainer {
         if (parameters != null) {
             this.pageParameters = parameters;
         }
+    }
+
+    
+    public void redirect(String url) {
+        this.redirectUrl = url;
+    }
+
+    public String getRedirectUrl() {
+        return redirectUrl;
+    }
+
+    public void addCookie(String name, String value, String path) {
+        responseCookies.add(name + "=" + value + "; Path=" + (path != null ? path : "/") + "; HttpOnly");
+    }
+
+    public void clearCookie(String name, String path) {
+        responseCookies.add(name + "=; Path=" + (path != null ? path : "/") + "; Max-Age=0; HttpOnly");
+    }
+
+    public java.util.List<String> getResponseCookies() {
+        return responseCookies;
     }
 
     public String getPageTitle() {

@@ -65,21 +65,44 @@ public class Form<T> extends MarkupContainer {
     public void processSubmit(Map<String, String> formData) {
         if (formData == null) return;
 
-        // Traverse child components and update models
+        // 1. Traverse child components and update models
+        io.jettra.studio.components.Button clickedButton = null;
+        io.jettra.studio.components.Button defaultButton = null;
+
         for (Component child : this) {
             String childId = child.getId();
             if (formData.containsKey(childId)) {
                 String submittedVal = formData.get(childId);
                 child.setModelObject(submittedVal);
+                if (child instanceof io.jettra.studio.components.Button btn) {
+                    clickedButton = btn;
+                }
+            }
+            if (child instanceof io.jettra.studio.components.Button btn && defaultButton == null) {
+                defaultButton = btn;
             }
         }
 
+        // 2. Trigger button onClick action hook
+        if (clickedButton != null) {
+            clickedButton.onClick();
+        } else if (defaultButton != null) {
+            defaultButton.onClick();
+        }
+
+        // 3. Trigger form-level onSubmit hook
         onSubmit();
     }
 
     @Override
     public void onComponentTag(MarkupTag tag) {
         super.onComponentTag(tag);
+        if (tag.getAttribute("id") == null) {
+            tag.setAttribute("id", getId());
+        }
+        if (tag.getAttribute("name") == null) {
+            tag.setAttribute("name", getId());
+        }
         tag.setAttribute("method", method != null ? method : "POST");
         if (action != null && !action.isBlank()) {
             tag.setAttribute("action", action);
