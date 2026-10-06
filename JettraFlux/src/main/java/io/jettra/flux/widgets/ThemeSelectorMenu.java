@@ -33,6 +33,7 @@ public class ThemeSelectorMenu extends Widget {
         THEME_ICONS.put("core", "⚛️");
         THEME_ICONS.put("police", "🚔");
         THEME_ICONS.put("games", "🎮");
+        THEME_ICONS.put("bit", "💎");
     }
 
     public ThemeSelectorMenu() {

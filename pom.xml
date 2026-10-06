@@ -31,7 +31,6 @@
         <module>JettraCollections</module>
         <module>themes/Admin</module>
         <module>themes/AdminLTE</module>
-        <module>themes/Bit</module>
         <module>themes/Metropolis</module>
         <module>themes/Tail</module>
         <module>themes/Traditional</module>
