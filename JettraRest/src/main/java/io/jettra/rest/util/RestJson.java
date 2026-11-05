@@ -31,6 +31,10 @@ public class RestJson {
                             value = Long.parseLong(value.toString());
                         } else if (rc.getType() == boolean.class || rc.getType() == Boolean.class) {
                             value = Boolean.parseBoolean(value.toString());
+                        } else if (rc.getType() == double.class || rc.getType() == Double.class) {
+                            value = Double.parseDouble(value.toString());
+                        } else if (rc.getType() == float.class || rc.getType() == Float.class) {
+                            value = Float.parseFloat(value.toString());
                         } else if (rc.getType() == java.util.UUID.class) {
                             value = java.util.UUID.fromString(value.toString());
                         }
@@ -56,6 +60,10 @@ public class RestJson {
                                 value = Long.parseLong(value.toString());
                             } else if (field.getType() == boolean.class || field.getType() == Boolean.class) {
                                 value = Boolean.parseBoolean(value.toString());
+                            } else if (field.getType() == double.class || field.getType() == Double.class) {
+                                value = Double.parseDouble(value.toString());
+                            } else if (field.getType() == float.class || field.getType() == Float.class) {
+                                value = Float.parseFloat(value.toString());
                             } else if (field.getType() == java.util.UUID.class) {
                                 value = java.util.UUID.fromString(value.toString());
                             }
@@ -77,6 +85,11 @@ public class RestJson {
         if (obj == null) return "null";
         if (obj instanceof String) return "\"" + obj + "\"";
         if (obj instanceof Number || obj instanceof Boolean) return obj.toString();
+        if (obj instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> m = (Map<String, Object>) obj;
+            return JettraJson.toJson(m);
+        }
         if (obj instanceof Iterable) {
             java.util.StringJoiner sj = new java.util.StringJoiner(",", "[", "]");
             for (Object item : (Iterable<?>) obj) {
