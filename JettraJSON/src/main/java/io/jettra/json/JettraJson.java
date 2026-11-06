@@ -26,6 +26,9 @@ public class JettraJson {
         if (src instanceof String) {
             return "\"" + escapeString((String) src) + "\"";
         }
+        if (src instanceof Enum<?> e) {
+            return "\"" + escapeString(e.name()) + "\"";
+        }
         if (src instanceof Number || src instanceof Boolean) {
             return src.toString();
         }
@@ -242,6 +245,9 @@ public class JettraJson {
         Class<?> clazz = obj.getClass();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers()) || field.isSynthetic()) {
+                continue;
+            }
             field.setAccessible(true);
             try {
                 Object value = field.get(obj);
