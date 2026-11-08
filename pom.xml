@@ -17,25 +17,7 @@
     </properties>
     
     <modules>
-        <module>JettraAnnotation</module>
-        <module>JettraCDI</module>
         <module>JettraEE</module>
-        <module>JettraFlux</module>
-        <module>JettraGRPC</module>
-        <module>JettraJSON</module>
-        <module>JettraJWT</module>
-        <module>JettraReport</module>
-        <module>JettraRest</module>
-        <module>JettraRules</module>
-        <module>JettraTest</module>
-        <module>JettraCollections</module>
-        <module>themes/Admin</module>
-        <module>themes/AdminLTE</module>
-        <module>themes/Metropolis</module>
-        <module>themes/Tail</module>
-        <module>themes/Traditional</module>
-        <module>JettraStudio</module>
-
     </modules>
     <dependencies>
     
